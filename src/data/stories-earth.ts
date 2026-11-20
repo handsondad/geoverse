@@ -144,7 +144,11 @@ export const earthStories: readonly GeoStory[] = [
       answerIndex: 1,
       explain: "大西洋海底正中的大西洋中脊不断有岩浆涌出冷却成新地壳，像传送带一样把两侧板块每年推开几厘米！"
     },
-    parentTip: "家长可以拿两本合在一起的厚书在桌面上慢慢拉开，让孩子从书缝下面往上顶出一张彩纸，直观模拟海底扩张。"
+    parentTip: "家长可以拿两本合在一起的厚书在桌面上慢慢拉开，让孩子从书缝下面往上顶出一张彩纸，直观模拟海底扩张。",
+    sources: [
+      { title: "USGS · This Dynamic Earth: Historical Perspective (Pangaea)", url: "https://pubs.usgs.gov/gip/dynamic/historical.html" },
+      { title: "National Geographic Education · Seafloor Spreading", url: "https://education.nationalgeographic.org/resource/seafloor-spreading/" }
+    ]
   },
   {
     id: "himalayas-everest",
@@ -295,7 +299,11 @@ export const earthStories: readonly GeoStory[] = [
       answerIndex: 1,
       explain: "印度板块向北撞击欧亚板块，把原本处于古特提斯海的海底岩层挤压抬升成了世界最高的山脉，这就是“沧海桑田”！"
     },
-    parentTip: "在桌面放两条毛巾，让孩子双手从两端往中间用力推，毛巾立刻就会皱起一座“喜马拉雅山”！"
+    parentTip: "在桌面放两条毛巾，让孩子双手从两端往中间用力推，毛巾立刻就会皱起一座“喜马拉雅山”！",
+    sources: [
+      { title: "USGS · The Himalayas: Two Continents Collide", url: "https://pubs.usgs.gov/gip/dynamic/himalaya.html" },
+      { title: "自然资源部 · 2020 珠穆朗玛峰最新高程测量（8848.86 米）", url: "https://www.gov.cn/xinwen/2020-12/08/content_5568310.htm" }
+    ]
   },
   {
     id: "ring-of-fire-trench",
@@ -450,7 +458,11 @@ export const earthStories: readonly GeoStory[] = [
       answerIndex: 1,
       explain: "密度较大的太平洋板块斜插进菲律宾海等板块下方，形成了深邃的马里亚纳海沟，同时在另一侧催生出火山岛弧。"
     },
-    parentTip: "可以在地图上带孩子数一数太平洋周围的岛弧（千岛群岛、日本列岛、菲律宾群岛），看看它们是不是都像一条条弯弯的项链。"
+    parentTip: "可以在地图上带孩子数一数太平洋周围的岛弧（千岛群岛、日本列岛、菲律宾群岛），看看它们是不是都像一条条弯弯的项链。",
+    sources: [
+      { title: "National Geographic Education · Ring of Fire", url: "https://education.nationalgeographic.org/resource/ring-fire/" },
+      { title: "NOAA Ocean Exploration · Mariana Trench & Challenger Deep", url: "https://oceanexplorer.noaa.gov/facts/mariana-trench.html" }
+    ]
   },
 
   // ==================== 2. weather ====================
@@ -609,7 +621,11 @@ export const earthStories: readonly GeoStory[] = [
       answerIndex: 0,
       explain: "暖湿空气沿着迎风坡爬升遇冷成云致雨，翻过山顶到背风坡时水汽所剩无几又下沉增温，于是形成“雨影区”！"
     },
-    parentTip: "烧开水时拿一个冰凉的金属盘子斜放在水壶口上方，孩子能亲眼看到水蒸气“爬坡遇冷”变成雨滴落下来。"
+    parentTip: "烧开水时拿一个冰凉的金属盘子斜放在水壶口上方，孩子能亲眼看到水蒸气“爬坡遇冷”变成雨滴落下来。",
+    sources: [
+      { title: "National Geographic Education · Rain Shadow", url: "https://education.nationalgeographic.org/resource/rain-shadow/" },
+      { title: "WMO · Greatest Average Annual Precipitation (Mawsynram)", url: "https://wmo.int/asu-map?map=Precip_010" }
+    ]
   },
   {
     id: "desert-belt-30deg",
@@ -737,7 +753,11 @@ export const earthStories: readonly GeoStory[] = [
       answerIndex: 0,
       explain: "赤道受热空气上升降下暴雨后，高空干燥气流向南北移动并在大约南北纬 30 度处下沉增温，形成副热带高气压沙漠带！"
     },
-    parentTip: "可以拿地球仪让孩子找一找北回归线（23.4°N）和北纬30°穿过了哪些地方，对比撒哈拉与中国江南的反差。"
+    parentTip: "可以拿地球仪让孩子找一找北回归线（23.4°N）和北纬30°穿过了哪些地方，对比撒哈拉与中国江南的反差。",
+    sources: [
+      { title: "NOAA JetStream · Global Circulations (Hadley Cell)", url: "https://www.noaa.gov/jetstream/global/global-circulations" },
+      { title: "NASA Earth Observatory · Subtropical Desert Belts", url: "https://earthobservatory.nasa.gov/images/88277/desert-belts" }
+    ]
   },
   {
     id: "monsoon-miracle",
@@ -879,7 +899,11 @@ export const earthStories: readonly GeoStory[] = [
       answerIndex: 0,
       explain: "东濒太平洋、背靠亚欧大陆，加上青藏高原的抬升热力作用，造就了强盛的东亚季风，给北纬 30° 的中国送来丰沛夏雨！"
     },
-    parentTip: "可以问问孩子：夏天去海边玩，中午踩沙子和踩海水哪个烫？冬天呢？这就是“海陆热力差异”的直接体验！"
+    parentTip: "可以问问孩子：夏天去海边玩，中午踩沙子和踩海水哪个烫？冬天呢？这就是“海陆热力差异”的直接体验！",
+    sources: [
+      { title: "National Geographic Education · Monsoon", url: "https://education.nationalgeographic.org/resource/monsoon/" },
+      { title: "中国气象局 · 东亚季风与海陆热力差异科普", url: "https://www.cma.gov.cn/" }
+    ]
   },
 
   // ==================== 3. china ====================
@@ -1008,7 +1032,11 @@ export const earthStories: readonly GeoStory[] = [
       answerIndex: 0,
       explain: "水往低处流！东高西低不仅会让大河倒流向西，还会把东部变成高墙挡住太平洋湿润夏季风，内陆会干得多。"
     },
-    parentTip: "可以用三本厚薄不同的书叠成阶梯，在上面铺一条蓝色丝带代表长江，让孩子直观理解“落差越大水流越急”。"
+    parentTip: "可以用三本厚薄不同的书叠成阶梯，在上面铺一条蓝色丝带代表长江，让孩子直观理解“落差越大水流越急”。",
+    sources: [
+      { title: "中华人民共和国国情概况 · 中国地形与西高东低三级阶梯", url: "https://www.gov.cn/guoqing/2005-09/13/content_2582623.htm" },
+      { title: "人民教育出版社 · 初中《地理》中国的地形和地势", url: "https://www.pep.com.cn/" }
+    ]
   },
   {
     id: "qinling-huaihe-line",
@@ -1153,7 +1181,11 @@ export const earthStories: readonly GeoStory[] = [
       answerIndex: 1,
       explain: "秦岭阻挡冬季寒潮、拦截夏季水汽，与东侧淮河共同构成 1 月 0℃ 等温线和 800mm 降水线，区分了南方与北方。"
     },
-    parentTip: "吃饭时可以跟孩子聊聊“今天吃米还是吃面”，再一起找找老家在秦岭—淮河的南边还是北边。"
+    parentTip: "吃饭时可以跟孩子聊聊“今天吃米还是吃面”，再一起找找老家在秦岭—淮河的南边还是北边。",
+    sources: [
+      { title: "中国科学院地理科学与资源研究所 · 中国南北分界线（秦岭—淮河）", url: "https://www.igsnrr.ac.cn/" },
+      { title: "中国气象局 · 1 月 0℃ 等温线与 800 毫米等降水量线", url: "https://www.cma.gov.cn/" }
+    ]
   },
   {
     id: "china-landforms",
@@ -1304,6 +1336,10 @@ export const earthStories: readonly GeoStory[] = [
       answerIndex: 1,
       explain: "吐鲁番盆地中的艾丁湖湖面低于海平面约 154 米，是中国陆地最低点，坎儿井把天山雪水藏进地下暗渠防蒸发。"
     },
-    parentTip: "用吸管轻轻吹面粉堆到一本书边上，积起来的小粉堆就是风力堆积形成“黄土高原”的微缩版！"
+    parentTip: "用吸管轻轻吹面粉堆到一本书边上，积起来的小粉堆就是风力堆积形成“黄土高原”的微缩版！",
+    sources: [
+      { title: "UNESCO World Heritage Centre · South China Karst", url: "https://whc.unesco.org/en/list/1248/" },
+      { title: "中国科学院 · 黄土高原风成学说与吐鲁番盆地科考", url: "https://www.cas.cn/" }
+    ]
   }
 ];

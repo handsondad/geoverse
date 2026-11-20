@@ -19,60 +19,145 @@ export function Burst() {
   );
 }
 
-export function DuoStage({ chats, title = "小念和爸爸" }: { chats: readonly Pair[]; title?: string }) {
+const posterUrl = `${(import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? "./"}images/home-duo-poster.webp`;
+
+function probeWebGL(): boolean {
+  if (typeof document === "undefined") return false;
+  try {
+    const canvas = document.createElement("canvas");
+    return Boolean(canvas.getContext("webgl2") || canvas.getContext("webgl"));
+  } catch {
+    return false;
+  }
+}
+
+export function DuoStage({
+  chats,
+  sound = true,
+  title = "小念和爸爸探索地球的奥秘"
+}: {
+  chats: readonly Pair[];
+  sound?: boolean;
+  title?: string;
+}) {
   const [index, setIndex] = useState(0);
+  const [ready3d, setReady3d] = useState(false);
   const [nianLine, dadLine] = chats[index % chats.length];
   const speaking = useSpeaking();
   const heard = useRef(false);
+  const planetRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<{ cheer(): void; destroy(): void } | null>(null);
+  const bootedRef = useRef(false);
+  const talkRef = useRef<() => void>(() => {});
 
   function talk() {
     const next = heard.current ? (index + 1) % chats.length : index;
     heard.current = true;
     setIndex(next);
-    say(nian(chats[next][0]), dad(chats[next][1]));
+    stageRef.current?.cheer();
+    if (sound) {
+      say(nian(chats[next][0]), dad(chats[next][1]));
+    }
   }
+  talkRef.current = talk;
+
+  const boot3d = () => {
+    const host = planetRef.current;
+    if (!host || bootedRef.current) return;
+    const saveData = Boolean(
+      (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData
+    );
+    if (saveData || !probeWebGL()) return;
+    bootedRef.current = true;
+    void import("../components/home-planet.ts")
+      .then(({ mountGeoPlanet }) => mountGeoPlanet(host, () => talkRef.current()))
+      .then((duo) => {
+        if (!planetRef.current) {
+          duo.destroy();
+          return;
+        }
+        stageRef.current = duo;
+        requestAnimationFrame(() => {
+          if (planetRef.current) setReady3d(true);
+        });
+      })
+      .catch((error: unknown) => {
+        console.warn("地理小星球没能加载，保留首屏海报。", error);
+      });
+  };
+
+  useEffect(() => {
+    const saveData = Boolean(
+      (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData
+    );
+    if (saveData || !probeWebGL()) return;
+    const win = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    let idle = 0;
+    const timer = window.setTimeout(() => {
+      if (win.requestIdleCallback) idle = win.requestIdleCallback(boot3d, { timeout: 1000 });
+      else boot3d();
+    }, 220);
+    return () => {
+      window.clearTimeout(timer);
+      if (idle && win.cancelIdleCallback) win.cancelIdleCallback(idle);
+      stageRef.current?.destroy();
+      stageRef.current = null;
+      bootedRef.current = false;
+    };
+  }, []);
 
   return (
-    <section aria-label={title}>
-      <h2 className="section-title">{title}</h2>
-      <div className="duo">
-        <svg className="duo-waves" viewBox="0 0 800 300" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 212 Q 100 152 200 212 T 400 212 T 600 212 T 800 212 T 1000 212" />
-          <path d="M0 234 Q 50 202 100 234 T 200 234 T 300 234 T 400 234 T 500 234 T 600 234 T 700 234 T 800 234 T 900 234 T 1000 234" />
-        </svg>
-        <div className="duo-sparkles" aria-hidden="true">
-          <span>🌋</span>
-          <span>🌦️</span>
-          <span>🌊</span>
-          <span>🧭</span>
-        </div>
+    <section className="home-duo" aria-labelledby="home-duo-title">
+      <h2 id="home-duo-title" className="section-title">
+        {title}
+      </h2>
+      <div
+        ref={planetRef}
+        className={`home-planet${ready3d ? " is-3d" : ""}`}
+        onPointerEnter={boot3d}
+        onClick={(event) => {
+          if (!stageRef.current && event.target === event.currentTarget) {
+            boot3d();
+            talk();
+          }
+        }}
+      >
+        <img
+          className="home-duo-poster"
+          src={posterUrl}
+          width={1140}
+          height={380}
+          fetchPriority="high"
+          decoding="async"
+          alt=""
+          aria-hidden="true"
+        />
         <button
           type="button"
-          className={`duo-bubble is-nian${isSpeaking(speaking, "nian", nianLine) ? " is-speaking" : ""}`}
+          className={`home-bubble is-nian${isSpeaking(speaking, "nian", nianLine) ? " is-speaking" : ""}`}
+          title="点一下，听他们聊并换一个问题"
           onClick={talk}
         >
           <b>小念</b>
-          {nianLine}
+          <span>{nianLine}</span>
         </button>
         <button
           type="button"
-          className={`duo-bubble is-dad${isSpeaking(speaking, "dad", dadLine) ? " is-speaking" : ""}`}
+          className={`home-bubble is-dad${isSpeaking(speaking, "dad", dadLine) ? " is-speaking" : ""}`}
+          title="点一下，听他们聊并换一个问题"
           onClick={talk}
         >
           <b>爸爸</b>
-          {dadLine}
+          <span>{dadLine}</span>
         </button>
-        <button type="button" className="duo-people" onClick={talk} aria-label="点一下，小念和爸爸接着聊">
-          <span className="duo-dad">
-            <Avatar who="dad" />
-          </span>
-          <span className="duo-nian">
-            <Avatar who="nian" />
-          </span>
+      </div>
+      <div className="home-planet-actions">
+        <button type="button" className="home-next" onClick={talk}>
+          换一个问题 ↻
         </button>
-        <span className="duo-hint" aria-hidden="true">
-          点他们，接着聊 👆
-        </span>
       </div>
     </section>
   );

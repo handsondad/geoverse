@@ -108,7 +108,7 @@ export function HubPage({ settings }: { settings: Settings }) {
         </button>
       </div>
 
-      <DuoStage chats={hubChats} />
+      <DuoStage chats={hubChats} sound={settings.sound} />
 
       <section className="hub-finder" aria-label="快速寻找地理动画或进入实验室">
         <div className="hub-finder-bar">

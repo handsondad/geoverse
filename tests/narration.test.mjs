@@ -46,7 +46,7 @@ test("sceneAtTime 与 lineAtTime 边界查询精确", () => {
   assert.ok(narrationGaps.lead > 0);
 });
 
-test("全站 24 集故事全部满足有声时间轴无重叠约束", () => {
+test("全站全部地理故事均满足有声时间轴无重叠约束", () => {
   for (const st of allStories) {
     const tl = buildNarratedTimeline(st, (who, text) => manifest.clips[`${who}|${text.trim()}`]?.seconds);
     assert.equal(tl.lines.length, st.dialogue.length * 2, `${st.id} 台词条数不匹配`);

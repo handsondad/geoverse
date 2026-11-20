@@ -79,6 +79,15 @@ export function checkAllRules() {
     if (st.quiz.answerIndex < 0 || st.quiz.answerIndex >= st.quiz.options.length) {
       errors.push(`[测验答案] ${st.id} quiz.answerIndex 越界`);
     }
+    if (!st.sources || st.sources.length === 0) {
+      errors.push(`[参考来源] ${st.id} 必须提供至少 1 条权威参考来源 (sources)`);
+    } else {
+      for (const src of st.sources) {
+        if (!src.title?.trim() || !/^https?:\/\//.test(src.url || "")) {
+          errors.push(`[参考来源] ${st.id} 存在不合法的来源条目 (${src.title ?? "无标题"})`);
+        }
+      }
+    }
     for (const sc of st.scenes) {
       if (sc.turn < 0 || sc.turn >= st.dialogue.length) {
         errors.push(`[分镜对齐] ${st.id} 场次 "${sc.title}" 引用了不存在的 turn=${sc.turn}`);
@@ -106,6 +115,26 @@ export function checkAllRules() {
     }
     if (!w.familyTip.startsWith("🏠 亲子小探秘：")) {
       errors.push(`[百宝箱格式] ${w.id} 的 familyTip 须以 "🏠 亲子小探秘：" 开头`);
+    }
+  }
+
+  const skillSourceRoot = path.join(ROOT, "skills");
+  if (fs.existsSync(skillSourceRoot)) {
+    const sourceFiles = walkFiles(skillSourceRoot);
+    for (const srcFile of sourceFiles) {
+      const subRel = path.relative(skillSourceRoot, srcFile);
+      const srcContent = fs.readFileSync(srcFile, "utf8").replace(/\r\n/g, "\n");
+      for (const mirrorDir of [".agents/skills", ".cursor/skills"]) {
+        const mirrorFile = path.join(ROOT, mirrorDir, subRel);
+        if (!fs.existsSync(mirrorFile)) {
+          errors.push(`[Skill镜像缺失] 缺少 ${rel(mirrorFile)}（请运行 npm run skills:sync）`);
+        } else {
+          const mirrorContent = fs.readFileSync(mirrorFile, "utf8").replace(/\r\n/g, "\n");
+          if (mirrorContent !== srcContent) {
+            errors.push(`[Skill镜像不一致] ${rel(mirrorFile)} 与 skills/ 源文件不一致（请运行 npm run skills:sync）`);
+          }
+        }
+      }
     }
   }
 

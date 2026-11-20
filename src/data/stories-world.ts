@@ -169,7 +169,11 @@ export const worldGeoStories: readonly GeoStory[] = [
       answerIndex: 1,
       explain: "墨西哥湾暖流与北大西洋暖流把低纬度的暖水一路送到西欧沿海，配合盛行西风把暖湿空气吹向陆地，让英国冬天格外温和！"
     },
-    parentTip: "可以在透明碗里放室温水，一边轻轻放一块蓝色冰块、另一边倒一点染红的热水，孩子能亲眼看见冷沉暖浮形成对流洋流。"
+    parentTip: "可以在透明碗里放室温水，一边轻轻放一块蓝色冰块、另一边倒一点染红的热水，孩子能亲眼看见冷沉暖浮形成对流洋流。",
+    sources: [
+      { title: "NOAA National Ocean Service · What Is the Gulf Stream?", url: "https://oceanservice.noaa.gov/facts/gulfstreamspeed.html" },
+      { title: "NOAA Ocean Service · Global Ocean Conveyor Belt", url: "https://oceanservice.noaa.gov/education/tutorial_currents/05conveyor1.html" }
+    ]
   },
   {
     id: "nile-amazon-rivers",
@@ -320,7 +324,11 @@ export const worldGeoStories: readonly GeoStory[] = [
       answerIndex: 0,
       explain: "尼罗河约 6650 公里为世界最长河，而流经热带雨林的亚马孙河约 6400 公里但水量世界第一，每秒入海流量约 20.9 万立方米！"
     },
-    parentTip: "可以在海滩或沙坑里倒一瓢水，让孩子看着小水流自己拐弯、并在入水口积出小小扇形三角洲。"
+    parentTip: "可以在海滩或沙坑里倒一瓢水，让孩子看着小水流自己拐弯、并在入水口积出小小扇形三角洲。",
+    sources: [
+      { title: "Encyclopaedia Britannica · Amazon River & Nile River", url: "https://www.britannica.com/place/Amazon-River" },
+      { title: "National Geographic Education · Delta", url: "https://education.nationalgeographic.org/resource/delta/" }
+    ]
   },
   {
     id: "global-straits-canals",
@@ -484,7 +492,11 @@ export const worldGeoStories: readonly GeoStory[] = [
       answerIndex: 0,
       explain: "苏伊士运河沿低平沙地开挖，直接连通地中海和红海；而巴拿马运河中间地势高，靠淡水注水闸门把船抬上加通湖再放回大洋！"
     },
-    parentTip: "可以在浴缸或水盆里用两块积木夹出一条“窄水沟”放小纸船，告诉孩子为什么港口和补给点总爱守在咽喉海峡旁边。"
+    parentTip: "可以在浴缸或水盆里用两块积木夹出一条“窄水沟”放小纸船，告诉孩子为什么港口和补给点总爱守在咽喉海峡旁边。",
+    sources: [
+      { title: "Panama Canal Authority · How the Panama Canal Works", url: "https://pancanal.com/en/how-the-panama-canal-works/" },
+      { title: "Encyclopaedia Britannica · Suez Canal & Strait of Malacca", url: "https://www.britannica.com/topic/Suez-Canal" }
+    ]
   },
 
   // ==================== 5. sky ====================
@@ -620,7 +632,11 @@ export const worldGeoStories: readonly GeoStory[] = [
       answerIndex: 0,
       explain: "地轴倾斜约 23.44°，使得地球公转时半年北半球朝向太阳（夏季）、半年南半球朝向太阳（夏季）！"
     },
-    parentTip: "关灯拿手电筒照着歪斜的橘子或地球仪绕圈转，让孩子对比光线直照和斜照时亮斑的面积大小，一秒秒懂四季！"
+    parentTip: "关灯拿手电筒照着歪斜的橘子或地球仪绕圈转，让孩子对比光线直照和斜照时亮斑的面积大小，一秒秒懂四季！",
+    sources: [
+      { title: "NASA Space Place · What Causes the Seasons?", url: "https://spaceplace.nasa.gov/seasons/en/" },
+      { title: "NOAA National Weather Service · Why Do We Have Seasons?", url: "https://www.weather.gov/lmk/seasons" }
+    ]
   },
   {
     id: "midnight-sun-aurora",
@@ -735,7 +751,11 @@ export const worldGeoStories: readonly GeoStory[] = [
       answerIndex: 1,
       explain: "地球磁场像盾牌一样偏转太阳风，带电粒子沿着磁力线在南北极附近冲入大气层，激发氧原子和氮原子发出绚丽极光！"
     },
-    parentTip: "用一块条形磁铁在白纸下放铁屑，就能看见磁力线像花瓣一样全部收束回磁铁两端的“南北极”，跟极光原理一模一样！"
+    parentTip: "用一块条形磁铁在白纸下放铁屑，就能看见磁力线像花瓣一样全部收束回磁铁两端的“南北极”，跟极光原理一模一样！",
+    sources: [
+      { title: "NASA Space Place · What Is an Aurora?", url: "https://spaceplace.nasa.gov/aurora/en/" },
+      { title: "NOAA Space Weather Prediction Center · Aurora Tutorial", url: "https://www.swpc.noaa.gov/content/tips-viewing-aurora" }
+    ]
   },
   {
     id: "timezones-dateline",
@@ -883,7 +903,11 @@ export const worldGeoStories: readonly GeoStory[] = [
       answerIndex: 1,
       explain: "地球一周 360° 自转一圈约 24 小时，360° ÷ 24 = 15°，所以每跨越 15° 经度就是一个标准时区（1小时）！"
     },
-    parentTip: "可以拿家里时钟和地球仪试一试：在伦敦指向早上 8 点时，往东数 8 个 15°（120°E），正好对应北京下午 4 点！"
+    parentTip: "可以拿家里时钟和地球仪试一试：在伦敦指向早上 8 点时，往东数 8 个 15°（120°E），正好对应北京下午 4 点！",
+    sources: [
+      { title: "NOAA National Ocean Service · What Is the International Date Line?", url: "https://oceanservice.noaa.gov/facts/international-date-line.html" },
+      { title: "Royal Museums Greenwich · Prime Meridian and Time Zones", url: "https://www.rmg.co.uk/stories/topics/what-prime-meridian-why-it-greenwich" }
+    ]
   },
 
   // ==================== 6. human ====================
@@ -1023,7 +1047,11 @@ export const worldGeoStories: readonly GeoStory[] = [
       answerIndex: 0,
       explain: "欧洲地形多平原、平均海拔在七大洲中最低；大洋洲面积最小，东北部海域却拥有世界最大珊瑚礁群大堡礁！"
     },
-    parentTip: "可以在水杯里加几勺盐搅匀，把生鸡蛋放进去浮起来，让孩子亲手体验“死海浮力”的秘密！"
+    parentTip: "可以在水杯里加几勺盐搅匀，把生鸡蛋放进去浮起来，让孩子亲手体验“死海浮力”的秘密！",
+    sources: [
+      { title: "National Geographic Education · Continent", url: "https://education.nationalgeographic.org/resource/continent/" },
+      { title: "NASA Earth Observatory · The Dead Sea", url: "https://earthobservatory.nasa.gov/images/77092/the-dead-sea" }
+    ]
   },
   {
     id: "why-cities-on-rivers",
@@ -1140,7 +1168,11 @@ export const worldGeoStories: readonly GeoStory[] = [
       answerIndex: 2,
       explain: "大河与河口为城市提供了水源、平坦肥沃土地和便捷水运；河海交界处风力往往不小，并非为了躲风。"
     },
-    parentTip: "打开手机地图放大自己居住的城市，和孩子找一找穿城而过的河流或湖泊，看看城市老街区是不是贴着水边！"
+    parentTip: "打开手机地图放大自己居住的城市，和孩子找一找穿城而过的河流或湖泊，看看城市老街区是不是贴着水边！",
+    sources: [
+      { title: "National Geographic Education · Urban Area & River Settlements", url: "https://education.nationalgeographic.org/resource/urban-area/" },
+      { title: "UNESCO Intergovernmental Hydrological Programme · Water and Settlements", url: "https://www.unesco.org/en/ihp" }
+    ]
   },
   {
     id: "vertical-climate-andes",
@@ -1274,6 +1306,10 @@ export const worldGeoStories: readonly GeoStory[] = [
       answerIndex: 0,
       explain: "对流层中海拔每升高 1000 米，气温约下降 6℃，升高 3000 米大约降温 18℃，28℃ - 18℃ = 10℃！"
     },
-    parentTip: "下次去爬山或坐飞机时，可以和孩子一起看机舱屏幕上的“舱外温度”随高度不断掉到零下五十度！"
+    parentTip: "下次去爬山或坐飞机时，可以和孩子一起看机舱屏幕上的“舱外温度”随高度不断掉到零下五十度！",
+    sources: [
+      { title: "UNESCO World Heritage Centre · Kilimanjaro National Park", url: "https://whc.unesco.org/en/list/403/" },
+      { title: "NOAA JetStream · Layers of the Atmosphere (Lapse Rate)", url: "https://www.noaa.gov/jetstream/atmosphere/layers-of-atmosphere" }
+    ]
   }
 ];

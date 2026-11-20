@@ -207,47 +207,60 @@ p { margin: 0.4rem 0; }
 .hub-kw-chip { padding: 4px 12px; font-size: 0.85rem; }
 .hub-results-grid { margin-bottom: 8px; }
 
-/* Duo Hero Stage */
-.duo {
-  position: relative; height: 290px; border-radius: var(--radius-lg); overflow: hidden;
-  background: linear-gradient(180deg, #e6f4ff 0%, #fff8f0 100%);
-  border: 3px solid var(--border-color); box-shadow: var(--shadow-sm);
+/* Duo Hero Stage (Series 3D Little Planet) */
+.home-duo { position: relative; }
+.home-planet {
+  position: relative; height: 380px; border-radius: 32px; overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, #fff8f0 0%, #ffe3d3 65%, #ffd2c2 100%);
+  box-shadow: 0 4px 12px rgba(255, 111, 107, 0.15); cursor: pointer;
 }
-.duo-waves { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.duo-waves path {
-  fill: none; stroke-width: 4; stroke-linecap: round;
-  vector-effect: non-scaling-stroke; animation: drift 6s linear infinite;
+.home-planet.is-3d { cursor: default; }
+.home-duo-poster {
+  position: absolute; top: 0; left: 50%; height: 100%; width: auto; max-width: none;
+  transform: translateX(-50%); pointer-events: none; user-select: none;
+  transition: opacity 0.28s ease 0.12s;
 }
-.duo-waves path:first-child { stroke: rgba(77, 150, 255, 0.3); }
-.duo-waves path:last-child { stroke: rgba(255, 159, 67, 0.3); stroke-width: 3; animation-duration: 4.2s; }
-.duo-sparkles { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-.duo-sparkles span { position: absolute; font-size: 1.35rem; opacity: 0.5; animation: bob 3.8s ease-in-out infinite; }
-.duo-sparkles span:nth-child(1) { left: 10%; top: 72%; }
-.duo-sparkles span:nth-child(2) { left: 45%; top: 14%; animation-delay: 0.8s; }
-.duo-sparkles span:nth-child(3) { right: 41%; top: 18%; animation-delay: 1.4s; }
-.duo-sparkles span:nth-child(4) { right: 9%; top: 68%; animation-delay: 0.4s; }
-
-.duo-people {
-  position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 1;
-  display: flex; align-items: flex-end; gap: 6px; padding: 0; border: none; background: none;
+.duo-canvas {
+  position: absolute; inset: 0; display: block; width: 100%; height: 100%;
+  touch-action: pan-y; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
 }
-.duo-people .avatar { width: 100%; height: 100%; }
-.duo-dad { width: 128px; height: 128px; animation: bob 3s ease-in-out infinite; }
-.duo-nian { width: 96px; height: 96px; animation: bob 3s ease-in-out 0.5s infinite; }
-.duo-bubble {
-  position: absolute; top: 16px; max-width: calc(50% - 134px); padding: 10px 14px; z-index: 2;
-  text-align: left; font-size: 0.97rem; line-height: 1.55;
-  border-radius: 20px; border: 2px solid #cfe0f7; background: #fff;
-  box-shadow: var(--shadow-sm); animation: pop 0.4s both;
+.home-planet.is-3d .duo-canvas { opacity: 1; pointer-events: auto; }
+.home-planet.is-3d .home-duo-poster { opacity: 0; }
+.home-bubble {
+  position: absolute; z-index: 2; max-width: 45%; padding: 10px 16px;
+  border: 2px solid var(--border-color); background: #ffffff; box-shadow: var(--shadow-sm);
+  text-align: left; font-size: 0.95rem; line-height: 1.45; color: var(--text-primary);
+  transition: border-color 0.15s, box-shadow 0.15s; animation: bob 3.2s ease-in-out infinite;
 }
-.duo-bubble b { display: block; font-size: 0.76rem; color: var(--text-secondary); margin-bottom: 2px; }
-.duo-bubble.is-nian {
-  right: 18px; background: #fff7e6; border-color: #ffd7a8;
-  border-bottom-right-radius: 4px; font-weight: 700;
+.home-bubble b { display: block; margin-bottom: 2px; font-size: 0.76rem; font-weight: 700; }
+.home-bubble span {
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
-.duo-bubble.is-dad { left: 18px; top: 50px; border-bottom-left-radius: 4px; }
-.duo-bubble.is-speaking { border-color: #ff9f43; box-shadow: 0 0 0 3px rgba(255, 159, 67, 0.35), var(--shadow-sm); }
-.duo-hint { position: absolute; right: 18px; bottom: 12px; font-size: 0.84rem; color: var(--text-secondary); font-weight: 700; }
+.home-bubble.is-nian {
+  right: 14px; top: 14px; border-color: #ffd7a8; border-radius: 20px 20px 4px 20px;
+  background: #fff7e6; font-weight: 700;
+}
+.home-bubble.is-nian b { color: #c2621c; }
+.home-bubble.is-nian:hover { border-color: #ff9f43; }
+.home-bubble.is-dad {
+  left: 14px; top: 96px; border-color: #cfe0f7; border-radius: 20px 20px 20px 4px;
+  animation-delay: 1.4s;
+}
+.home-bubble.is-dad b { color: #2f63ad; }
+.home-bubble.is-dad:hover { border-color: #8db6f0; }
+.home-bubble.is-speaking {
+  border-color: #ff9f43; box-shadow: 0 0 0 3px rgba(255, 159, 67, 0.35), var(--shadow-sm);
+}
+.home-planet-actions {
+  position: absolute; z-index: 2; right: 16px; bottom: 16px;
+  display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px;
+}
+.home-next {
+  padding: 8px 16px; border: 2px solid #ffd7a8; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94); font-weight: 700; color: #a8501a;
+  box-shadow: var(--shadow-sm);
+}
+.home-next:hover { background: #fff7ec; border-color: #ff9f43; }
 
 /* Speech Bubbles & Chat */
 .chat { display: grid; gap: 8px; margin: 10px 0 14px; justify-items: start; }
@@ -769,11 +782,13 @@ p { margin: 0.4rem 0; }
   .modes, .modes.is-two, .sandbox-banner-grid, .talks, .wiki-grid { grid-template-columns: 1fr; }
   .mode-card.has-region-art { grid-template-columns: 74px 1fr; }
   .region-art.is-card { width: 74px; height: 74px; }
-  .duo { height: auto; min-height: 290px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-  .duo-sparkles { display: none; }
-  .duo-bubble { position: static; max-width: none; width: 100%; animation: none; }
-  .duo-people { position: static; transform: none; align-self: center; margin-top: auto; }
-  .duo-hint { position: static; align-self: center; }
+  .home-planet { height: 344px; }
+  .home-planet .home-bubble { max-width: calc(100% - 68px); font-size: 0.84rem; line-height: 1.4; padding: 7px 12px; }
+  .home-planet .home-bubble span { -webkit-line-clamp: 2; }
+  .home-bubble.is-nian { top: 10px; right: 10px; }
+  .home-bubble.is-dad { top: 86px; left: 10px; }
+  .home-planet-actions { position: static; justify-content: center; margin-top: 10px; }
+  .home-next { padding: 7px 14px; font-size: 0.88rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

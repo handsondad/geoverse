@@ -61,7 +61,7 @@ npm run story:new -- <realm> <story-id> "<中文标题>" "[emoji]" --write
 npm run voice
 ```
 
-确保 `src/data/voice-manifest.json` 覆盖全站所有新增台词。
+确保 `src/catalog/voice-manifest.json` 覆盖全站所有新增台词。若修改过 `skills/geoverse-builder/` 文档，请同步运行 `npm run skills:sync` 更新 `.agents/skills/` 与 `.cursor/skills/` 镜像。
 
 ### 第 5 步：交付前必跑全套门禁
 

@@ -20,3 +20,8 @@ This project (`geoverse`) includes or generates assets derived from the followin
 
 5. **NASA Visible Earth / Three.js 3D Globe Textures (`public/textures/`)**
    - `earth-day.jpg` (Blue Marble), `earth-night.jpg` (Black Marble Night Lights), `earth-bump.jpg` (Topography), `earth-water.jpg` (Ocean mask), and `earth-clouds.jpg` (Clouds): derived from NASA Earth Observatory / Visible Earth public-domain imagery distributed via `three-globe` (MIT) and `three.js` examples (MIT), downscaled locally for fast educational web loading.
+
+6. **3D Character Rig (`public/models/character.glb`)**
+   - Source: Quaternius (`quaternius.com`) *Ultimate Animated Character Pack · `Casual_Male`*.
+   - License: CC0 1.0 Universal (Public Domain Dedication); details documented in `public/models/CREDITS.md`.
+   - Usage: Shared across the `*verse` family (`bodyverse`, `chemverse`, `phyverse`, `bioverse`, `universe`, `hanverse`, `geoverse`) to render Nian and Dad on the 3D home planet (`src/series/duo-stage.ts`).
