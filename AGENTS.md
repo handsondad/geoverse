@@ -1,6 +1,9 @@
 # AGENTS.md — GeoVerse 地理奇遇记 Agent 协作与内容扩展指南
 
-本文档面向参与 **GeoVerse（地理奇遇记 · 小念和爸爸的地球探索馆）** 的所有编码 Agent。修改代码、调整样式或新增地理故事前，请先阅读并遵守以下规范。
+本文档面向参与 **GeoVerse（地理奇遇记 · 小念和爸爸的地球探索馆）** 的所有编码 Agent。修改代码、调整样式或新增地理故事前，请先阅读并遵守以下规范与项目 Skill：
+
+> - `.agents/skills/geoverse-builder/SKILL.md`（镜像于 `skills/geoverse-builder/SKILL.md`）
+> - `.agents/skills/geoverse-builder/content-reference.md`（展厅、预设区域、24 套剖面动画与图解速查表）
 
 ---
 
@@ -19,6 +22,8 @@
 | 命令 | 作用 |
 |---|---|
 | `npm run dev` | 启动 Vite 本地开发服务器 |
+| `npm run story:new` | 查看 6 大地球展厅 ID 与新地理故事脚手架用法 |
+| `npm run story:new -- <realm> <id> "<中文标题>" [emoji] [--write]` | 生成标准 `GeoStory` 模板并预览/写入新故事文件 |
 | `npm run typecheck` | `tsc --noEmit` 严格类型检查 |
 | `npm run check` | `node tools/check-rules.mjs` 仓库规则与内容一致性校验 |
 | `npm test` | 运行全部原生测试（`node --test tests/*.test.mjs`） |
