@@ -23,17 +23,22 @@ const MIME = {
 };
 
 function findBrowser() {
-  const candidates = [
-    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
-    "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
-    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    path.join(process.env.LOCALAPPDATA ?? "", "Microsoft\\Edge\\Application\\msedge.exe"),
-    path.join(process.env.LOCALAPPDATA ?? "", "Google\\Chrome\\Application\\chrome.exe")
-  ];
+  const envBin = process.env.BROWSER_BIN || process.env.CHROME_PATH;
+  if (envBin && fs.existsSync(envBin)) return envBin;
+  const candidates =
+    process.platform === "win32"
+      ? [
+          "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+          "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
+          "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          path.join(process.env.LOCALAPPDATA ?? "", "Microsoft\\Edge\\Application\\msedge.exe"),
+          path.join(process.env.LOCALAPPDATA ?? "", "Google\\Chrome\\Application\\chrome.exe")
+        ]
+      : ["/usr/bin/google-chrome", "/usr/bin/microsoft-edge", "/usr/bin/chromium"];
   for (const bin of candidates) {
     if (bin && fs.existsSync(bin)) return bin;
   }
-  throw new Error("未找到 Edge 或 Chrome");
+  throw new Error("未找到 Edge 或 Chrome，请设置 BROWSER_BIN 环境变量");
 }
 
 function startStaticServer() {

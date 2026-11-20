@@ -10,6 +10,7 @@ import { realms } from "../src/data/realms.ts";
 import { allStories, storiesIn } from "../src/data/stories.ts";
 import { geoTalks, geoWiki } from "../src/data/talks.ts";
 import { project, STAGE_H, STAGE_W } from "../src/lib/geo.ts";
+import { renderStoryIndex, STORY_INDEX_PATH } from "./story-index.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SRC_DIR = path.join(ROOT, "src");
@@ -136,6 +137,13 @@ export function checkAllRules() {
         }
       }
     }
+  }
+
+  const indexOnDisk = fs.existsSync(STORY_INDEX_PATH)
+    ? fs.readFileSync(STORY_INDEX_PATH, "utf8").replace(/\r\n/g, "\n")
+    : "";
+  if (indexOnDisk !== renderStoryIndex()) {
+    errors.push(`[故事索引过期] ${rel(STORY_INDEX_PATH)} 与故事内容不一致（请运行 npm run story:index）`);
   }
 
   return {

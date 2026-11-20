@@ -1,12 +1,20 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
-import { realms } from "../data/realms.ts";
-import { allStories, storyById } from "../data/stories.ts";
+import { realmById, realms } from "../data/realms.ts";
+import { loadStories, storyCardById } from "../data/story-index.ts";
 import type { RealmId } from "../data/types.ts";
-import { stopSpeaking } from "../kit/speech.ts";
+import type { Settings } from "../kit/Chrome.tsx";
+import { stopSpeaking, voiceReady } from "../kit/speech.ts";
 import { HubPage } from "../pages/HubPage.tsx";
 
 const RealmPage = lazy(() => import("../pages/RealmPage.tsx").then((m) => ({ default: m.RealmPage })));
-const StoryPage = lazy(() => import("../pages/StoryPage.tsx").then((m) => ({ default: m.StoryPage })));
+/** 故事页连同完整故事数据和配音清单（动画时间轴按配音时长排）一起按需加载 */
+const StoryRoute = lazy(() =>
+  Promise.all([import("../pages/StoryPage.tsx"), loadStories(), voiceReady]).then(([page, data]) => ({
+    default: ({ id, settings }: { id: string; settings: Settings }) => (
+      <page.StoryPage story={data.storyById(id) ?? data.allStories[0]} settings={settings} />
+    )
+  }))
+);
 const GlobeWorkbenchPage = lazy(() =>
   import("../pages/GlobeWorkbenchPage.tsx").then((m) => ({ default: m.GlobeWorkbenchPage }))
 );
@@ -37,7 +45,7 @@ function parseHash(): Route {
     if (realms.some((r) => r.id === id)) return { kind: "realm", id };
   }
   const storyMatch = hash.match(/^#\/story\/([^/?#]+)/);
-  if (storyMatch && storyById(storyMatch[1])) {
+  if (storyMatch && storyCardById(storyMatch[1])) {
     return { kind: "story", id: storyMatch[1] };
   }
   const globeMatch = hash.match(/^#\/(?:globe|atlas)(?:\/(sandbox|seasons|flight|pinpoint))?/);
@@ -49,6 +57,23 @@ function parseHash(): Route {
   }
   if (/^#\/quiz/.test(hash)) return { kind: "quiz" };
   return { kind: "hub" };
+}
+
+const SITE = "地理奇遇记";
+
+function titleOf(route: Route): string {
+  switch (route.kind) {
+    case "realm":
+      return `${realmById(route.id).title} · ${SITE}`;
+    case "story":
+      return `${storyCardById(route.id)?.title ?? "地理动画"} · ${SITE}`;
+    case "globe":
+      return `逼真 3D 地球仪 · ${SITE}`;
+    case "quiz":
+      return `地理原理实验室与经纬寻宝 · ${SITE}`;
+    default:
+      return `${SITE} · 小念和爸爸的地球探索馆`;
+  }
 }
 
 export default function App() {
@@ -76,6 +101,10 @@ export default function App() {
 
   const settings = { sound, setSound };
 
+  useEffect(() => {
+    document.title = titleOf(route);
+  }, [route]);
+
   if (route.kind === "realm") {
     return (
       <Suspense fallback={null}>
@@ -84,10 +113,9 @@ export default function App() {
     );
   }
   if (route.kind === "story") {
-    const story = storyById(route.id) ?? allStories[0];
     return (
       <Suspense fallback={null}>
-        <StoryPage story={story} settings={settings} />
+        <StoryRoute id={route.id} settings={settings} />
       </Suspense>
     );
   }

@@ -1,5 +1,4 @@
 import { useSyncExternalStore } from "react";
-import manifest from "../catalog/voice-manifest.json" with { type: "json" };
 
 export type Who = "nian" | "dad";
 export type Line = { who: Who; text: string };
@@ -10,10 +9,20 @@ export const dad = (text: string): Line => ({ who: "dad", text });
 export const pairLines = ([n, d]: Pair): Line[] => [nian(n), dad(d)];
 
 type ClipEntry = { file: string; seconds: number };
-const clips = (manifest as { clips: Record<string, ClipEntry> }).clips;
 const base = (import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? "./";
 
-export const clipOf = (who: Who, text: string): ClipEntry | undefined => clips[`${who}|${text.trim()}`];
+/** 配音清单（约 40 KB gzip）单独成包、不挡首屏；页面一打开就开始取，需要时多半已经到了 */
+let clips: Record<string, ClipEntry> | null = null;
+export const voiceReady: Promise<void> = import("../catalog/voice-manifest.json")
+  .then((mod) => {
+    clips = (mod.default as { clips: Record<string, ClipEntry> }).clips;
+  })
+  .catch((error: unknown) => {
+    console.warn("配音清单没能加载，改用浏览器朗读。", error);
+    clips = {};
+  });
+
+export const clipOf = (who: Who, text: string): ClipEntry | undefined => clips?.[`${who}|${text.trim()}`];
 export const hasClip = (who: Who, text: string): boolean => Boolean(clipOf(who, text));
 export const clipUrl = (who: Who, text: string): string | undefined => {
   const clip = clipOf(who, text);
@@ -58,7 +67,7 @@ function synth(who: Who, text: string, token: number): Promise<void> {
       const preferred =
         who === "nian"
           ? list.find((v) => /Yunxia/i.test(v.name))
-          : list.find((v) => /Yunxi/i.test(v.name));
+          : list.find((v) => /Yunxi(?!a)/i.test(v.name));
       const zhVoice =
         preferred ??
         list.find((item) => /^zh[-_]CN/i.test(item.lang)) ??
@@ -76,6 +85,8 @@ function synth(who: Who, text: string, token: number): Promise<void> {
 }
 
 let audio: HTMLAudioElement | null = null;
+/** 下一句的音频提前下载，一句接一句不卡顿 */
+let upcoming: HTMLAudioElement | null = null;
 let run = 0;
 let speaking: Line | null = null;
 const listeners = new Set<() => void>();
@@ -85,17 +96,30 @@ function setSpeaking(line: Line | null) {
   listeners.forEach((listener) => listener());
 }
 
-function play(who: Who, rawText: string, token: number): Promise<void> {
+function preload(line: Line | undefined) {
+  const url = line && clipUrl(line.who, line.text);
+  if (!url || typeof Audio === "undefined") return;
+  upcoming ??= new Audio();
+  if (upcoming.dataset.src === url) return;
+  upcoming.dataset.src = url;
+  upcoming.preload = "auto";
+  upcoming.src = url;
+}
+
+/** 播完（或被换掉）返回 true；浏览器拦下自动播放时返回 false，整段就此停下，不再一句句空跳 */
+function play(who: Who, rawText: string, token: number): Promise<boolean> {
   const text = rawText.trim();
-  const clip = clips[`${who}|${text}`];
-  if (!clip) return synth(who, text, token);
+  const clip = clips?.[`${who}|${text}`];
+  if (!clip) return synth(who, text, token).then(() => true);
   return new Promise((resolve) => {
-    if (token !== run) return resolve();
+    if (token !== run) return resolve(true);
     audio = new Audio(`${base}voice/${clip.file}.mp3`);
-    audio.onended = () => resolve();
-    audio.onerror = () => synth(who, text, token).then(resolve);
-    audio.onpause = () => resolve();
-    audio.play().catch(() => resolve());
+    audio.onended = () => resolve(true);
+    audio.onerror = () => synth(who, text, token).then(() => resolve(true));
+    audio.onpause = () => resolve(true);
+    audio.play().catch((error: unknown) => {
+      if (error instanceof DOMException && error.name === "NotAllowedError") resolve(false);
+    });
   });
 }
 
@@ -103,10 +127,13 @@ export async function say(...lines: Line[]) {
   stopSpeaking(false);
   claimAudioChannel(SPEECH_OWNER);
   const token = run;
-  for (const line of lines) {
+  if (!clips) await voiceReady;
+  for (const [index, line] of lines.entries()) {
     if (token !== run) return;
     setSpeaking(line);
-    await play(line.who, line.text, token);
+    const playing = play(line.who, line.text, token);
+    preload(lines[index + 1]);
+    if (!(await playing)) break;
   }
   if (token === run) setSpeaking(null);
 }

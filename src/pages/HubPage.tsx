@@ -1,10 +1,10 @@
-import { lazy, Suspense, useMemo, useState, type CSSProperties } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState, type CSSProperties } from "react";
 import { RealmArt } from "../components/RealmArt.tsx";
 import { quizStages } from "../data/quiz.ts";
 import { realms } from "../data/realms.ts";
-import { allStories, storiesIn } from "../data/stories.ts";
+import { loadStories, storyCards, storyCardsIn } from "../data/story-index.ts";
 import { geoTalks, geoWiki, hubChats } from "../data/talks.ts";
-import type { RealmId } from "../data/types.ts";
+import type { GeoStory, RealmId } from "../data/types.ts";
 import type { Settings } from "../kit/Chrome.tsx";
 import { DuoStage, Meter, TalksSection, WikiSection } from "../kit/GameKit.tsx";
 import { sumStars, useStarBook, type StarBook } from "../kit/progress.ts";
@@ -15,22 +15,38 @@ const MapThumb = lazy(() => import("../components/MapThumb.tsx").then((m) => ({ 
 const QUICK_KEYWORDS = ["珠穆朗玛峰", "撒哈拉", "三级阶梯", "秦岭", "四季", "马六甲"];
 
 function pickRandomStoryId(book: StarBook): string {
-  const unplayed = allStories.filter((s) => sumStars(book[s.id]) === 0);
-  const pool = unplayed.length > 0 ? unplayed : allStories;
+  const unplayed = storyCards.filter((s) => sumStars(book[s.id]) === 0);
+  const pool = unplayed.length > 0 ? unplayed : storyCards;
   return pool[Math.floor(Math.random() * pool.length)].id;
 }
 
 export function HubPage({ settings }: { settings: Settings }) {
   const [query, setQuery] = useState("");
   const book = useStarBook();
+  /** 搜索要翻对白、缩略图要画分镜，所以第一次点搜索框时才加载完整故事 */
+  const [fullStories, setFullStories] = useState<readonly GeoStory[] | null>(null);
+  const [wantStories, setWantStories] = useState(false);
 
-  const totalStoryMax = allStories.length * 3;
+  useEffect(() => {
+    if (!wantStories) return;
+    let alive = true;
+    loadStories()
+      .then((m) => {
+        if (alive) setFullStories(m.allStories);
+      })
+      .catch((error: unknown) => console.warn("地理故事没能加载，搜索暂时只能查百宝箱和问答。", error));
+    return () => {
+      alive = false;
+    };
+  }, [wantStories]);
+
+  const totalStoryMax = storyCards.length * 3;
   const totalQuizTargets = quizStages.reduce((acc, s) => acc + s.targets.length, 0);
   const totalQuizMax = (quizStages.length + 1) * 3;
   const grandMax = totalStoryMax + totalQuizMax;
 
   const grandEarned =
-    allStories.reduce((acc, s) => acc + Math.min(3, sumStars(book[s.id])), 0) +
+    storyCards.reduce((acc, s) => acc + Math.min(3, sumStars(book[s.id])), 0) +
     Math.min(totalQuizMax, sumStars(book["geo-quiz"]));
   const pct = grandMax > 0 ? Math.round((grandEarned / grandMax) * 100) : 0;
 
@@ -47,7 +63,7 @@ export function HubPage({ settings }: { settings: Settings }) {
   const searchResults = useMemo(() => {
     if (!trimmed) return null;
     const hit = (s: string) => s.toLowerCase().includes(trimmed);
-    const matchedStories = allStories.filter((st) => {
+    const matchedStories = (fullStories ?? []).filter((st) => {
       const reg = realmMap[st.realm];
       return (
         hit(st.title) ||
@@ -70,7 +86,8 @@ export function HubPage({ settings }: { settings: Settings }) {
       talks: matchedTalks,
       total: matchedStories.length + matchedWiki.length + matchedTalks.length
     };
-  }, [trimmed, realmMap]);
+  }, [trimmed, realmMap, fullStories]);
+  const searchingStories = Boolean(searchResults) && !fullStories;
 
   function nav(hash: string) {
     stopSpeaking();
@@ -119,7 +136,11 @@ export function HubPage({ settings }: { settings: Settings }) {
             <input
               type="search"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setWantStories(true)}
+              onChange={(e) => {
+                setWantStories(true);
+                setQuery(e.target.value);
+              }}
               placeholder="搜一搜地貌、气候或名川：如 珠穆朗玛峰、撒哈拉、季风、秦岭、极光……"
               aria-label="搜索地理动画故事、问答或百科"
             />
@@ -153,7 +174,9 @@ export function HubPage({ settings }: { settings: Settings }) {
           <div className="hub-search-results" aria-live="polite">
             <div className="hub-results-head">
               <strong>
-                {searchResults.total > 0
+                {searchingStories
+                  ? "正在翻找地理动画故事……"
+                  : searchResults.total > 0
                   ? `找到 ${searchResults.stories.length} 个地理动画故事、${searchResults.wiki.length} 段百宝箱、${searchResults.talks.length} 组问答`
                   : "没搜到这个词呢，试试下面这几个热门词？"}
               </strong>
@@ -221,12 +244,12 @@ export function HubPage({ settings }: { settings: Settings }) {
             六站系统地理探索路线（按第 1 → 6 站循序渐进）
           </h2>
           <span className="section-sub">
-            共 {allStories.length} 集互动地理动画 · {geoWiki.length} 篇百宝箱 · {geoTalks.length} 组父子问答
+            共 {storyCards.length} 集互动地理动画 · {geoWiki.length} 篇百宝箱 · {geoTalks.length} 组父子问答
           </span>
         </div>
         <div className="modes">
           {realms.map((realm) => {
-            const list = storiesIn(realm.id);
+            const list = storyCardsIn(realm.id);
             const realmMax = list.length * 3;
             const realmEarned = list.reduce((acc, s) => acc + Math.min(3, sumStars(book[s.id])), 0);
             return (

@@ -187,5 +187,5 @@ if (!write) {
   fs.writeFileSync(targetFile, code);
   console.log(`✅ 已创建 ${path.relative(ROOT, targetFile)}`);
   console.log(`\n下一步请在 src/data/stories.ts 中添加：\n  import { ${ident} } from "./stories/${id}.ts";`);
-  console.log("并将其加入 allStories 数组，随后运行 npm run voice && npm run check && npm test && npm run smoke。");
+  console.log("并将其加入 allStories 数组，随后运行 npm run story:index && npm run voice && npm run check && npm test && npm run smoke。");
 }

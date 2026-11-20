@@ -24,6 +24,7 @@
 | `npm run dev` | 启动 Vite 本地开发服务器 |
 | `npm run story:new` | 查看 6 大地球展厅 ID 与新地理故事脚手架用法 |
 | `npm run story:new -- <realm> <id> "<中文标题>" [emoji] [--write]` | 生成标准 `GeoStory` 模板并预览/写入新故事文件 |
+| `npm run story:index` | 重新生成首页用的轻量故事索引 `src/data/story-index.json`（新增/改标题、徽章、标签后必须运行，`npm run check` 会拦截过期索引） |
 | `npm run skills:sync` | 将 `skills/` 同步镜像至 `.agents/skills/` 与 `.cursor/skills/` |
 | `npm run typecheck` | `tsc --noEmit` 严格类型检查 |
 | `npm run check` | `node tools/check-rules.mjs` 仓库规则、参考来源与 Skill 镜像一致性校验 |
@@ -32,7 +33,7 @@
 | `npm run build` | 类型检查并构建生产包到 `dist/` |
 | `npm run smoke` | 无头 Edge/Chrome 桌面 + 手机双端巡检（零报错、零溢出、零重叠、全流程交互） |
 
-交付前需全部通过：`npm run typecheck`、`npm run check`、`npm test`、`npm run build`。修改过台词文字后必须重跑 `npm run voice` 并确认 `npm test` 通过。
+交付前需全部通过：`npm run typecheck`、`npm run check`、`npm test`、`npm run build`、`npm run smoke`（CI 同样会在 Linux Chrome + Noto CJK 字体下跑 smoke）。修改过台词文字后必须重跑 `npm run voice` 并确认 `npm test` 通过。
 
 ---
 
@@ -40,7 +41,8 @@
 
 | 路径 | 职责 |
 |---|---|
-| `src/shell/App.tsx` | Hash 路由分发（按页 `React.lazy` 拆包）与声音偏好持久化（`geoverse:sound:v1`） |
+| `src/shell/App.tsx` | Hash 路由分发（按页 `React.lazy` 拆包，故事页与完整故事数据、配音清单一起按需加载）、按路由设置 `document.title` 与声音偏好持久化（`geoverse:sound:v1`） |
+| `src/data/story-index.ts` / `story-index.json` | 首页与路由用的轻量故事索引（id、展厅、标题、徽章、标签）；首页不再打包完整故事，搜索框获得焦点时才 `loadStories()` |
 | `src/pages/` | `HubPage`（首页 + 3D 小星球首屏）、`RealmPage`（六站递进展厅）、`StoryPage`（图文问答+地图剖面动画）、`GlobeWorkbenchPage`（`#/globe` & `#/atlas` 4 合 1 逼真 3D 交互地球仪工作台）、`AtlasSandboxPage`（2D 沙盘降级备选）、`QuizPage`（地理原理实验室 & 经纬寻宝） |
 | `src/series/` & `src/components/home-planet.ts` | 系列共用的首页 3D 小星球引擎（`characters.ts`、`duo-stage.ts`）与地理专属 3D 道具（倾斜地球仪、冒烟小火山、指南针、雪山、热气球、彩虹雨云、遥感小卫星） |
 | `src/components/Globe3D.tsx` & `src/data/globe-data.ts` | 原生 Three.js + 自定义 GLSL 昼夜晨昏线/城市灯光/海洋高光/云层大气散射/大圆航线/3D 寻宝地球仪 |
@@ -52,7 +54,7 @@
 | `src/components/GeoFilmPlayer.tsx` | 音画同步播放器（支持音频预加载、跨标签页与气泡互斥防串音、后台自动暂停） |
 | `src/components/GeoFigure.tsx` | 对话内嵌小图（含双向零基线正负柱状图、色阶尺、阶梯剖面、地轴倾角） |
 | `src/lib/geo.ts` / `globe-math.ts` / `narration.ts` / `quiz-score.ts` / `motion.ts` | 纯函数模块（不依赖 DOM / Vite `import.meta.env`，可直接被 Node 测试导入） |
-| `src/kit/speech.ts` | 气泡单句/多句语音播放与全局音频通道互斥（`BroadcastChannel("geoverse-audio")`） |
+| `src/kit/speech.ts` | 气泡单句/多句语音播放（配音清单独立分包、`voiceReady` 就绪后再取时长；播放时预取下一句；自动播放被拦截即停）与全局音频通道互斥（`BroadcastChannel("geoverse-audio")`） |
 | `tools/voice/` | 配音采集（`collect.mjs`）、口语规范化与哈希（`voices.mjs`）、批量生成（`generate.mjs`） |
 
 ---

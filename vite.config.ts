@@ -5,6 +5,8 @@ export default defineConfig({
   base: "./",
   plugins: [react()],
   build: {
+    // three-vendor（约 600 KB）只在 3D 地球仪路由按需加载，不进首屏
+    chunkSizeWarningLimit: 650,
     rollupOptions: {
       output: {
         manualChunks(id) {

@@ -40,7 +40,7 @@ description: >-
 npm run story:new -- <realm> <story-id> "<中文标题>" "[emoji]" --write
 ```
 
-生成的 `src/data/stories/<story-id>.ts` 需在 `src/data/stories.ts` 导入并加入 `allStories` 数组。
+生成的 `src/data/stories/<story-id>.ts` 需在 `src/data/stories.ts` 导入并加入 `allStories` 数组，然后运行 `npm run story:index` 刷新首页轻量索引（`npm run check` 会拦截过期索引）。
 
 ### 第 2 步：编写 `GeoStory` 与地图/剖面分镜
 
