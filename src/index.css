@@ -164,14 +164,11 @@ p { margin: 0.4rem 0; }
 .home-title p { margin: 6px 0 0; color: var(--text-secondary); font-size: 1.05rem; }
 
 .hub-progress {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
-  margin: 14px 0 6px; padding: 12px 18px; border-radius: var(--radius-md);
-  background: linear-gradient(135deg, #fffdf6, #f4f9ff);
-  border: 2px solid #ffe0b8; box-shadow: var(--shadow-sm);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px 12px;
+  margin: 6px 0 8px;
 }
-.hub-progress-info { display: flex; align-items: center; gap: 10px; font-weight: 700; }
-.hub-progress-info strong { font-size: 1.12rem; color: #c25e00; }
-.hub-progress .meter { flex: 1; min-width: 210px; }
+.hub-progress-info { font-size: 0.88rem; font-weight: 700; color: var(--text-secondary); }
+.hub-progress .sound-btn { padding: 6px 12px; font-size: 0.88rem; }
 
 /* Hub Finder */
 .hub-finder { margin: 18px 0 4px; }
@@ -338,7 +335,6 @@ p { margin: 0.4rem 0; }
   border-top: 1.5px dashed color-mix(in srgb, var(--bubble, #ff9f43) 25%, white);
 }
 
-.story-next-btn { display: inline-flex; align-items: center; gap: 8px; }
 .mode-card strong { font-size: 1.18rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .mode-tag {
   font-size: 0.74rem; padding: 2px 8px; border-radius: 999px;
@@ -367,14 +363,6 @@ p { margin: 0.4rem 0; }
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 18px;
 }
 .sandbox-feature-card { min-height: 132px; }
-
-.region-intro-banner {
-  margin: 12px 0 8px; padding: 14px 18px; border-radius: var(--radius-md);
-  border: 2.5px dashed color-mix(in srgb, var(--bubble, #ff9f43) 55%, white);
-  background: color-mix(in srgb, var(--bubble, #ff9f43) 8%, #fffdf9);
-}
-.region-intro-banner span { font-weight: 700; font-size: 0.92rem; color: var(--text-secondary); }
-.region-intro-banner p { margin: 4px 0 0; font-size: 1.02rem; }
 
 /* Talks & Wiki */
 .talks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
@@ -480,48 +468,77 @@ p { margin: 0.4rem 0; }
 .map-scene-pills { display: flex; flex-wrap: wrap; gap: 6px; }
 .map-scene-pill { padding: 5px 12px; font-size: 0.84rem; }
 
-/* Story Page Layout & Inline Figures */
-.story-subtitle-bar {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
-  margin-bottom: 14px; padding: 10px 16px; border-radius: var(--radius-md);
-  background: #fff; border: 2px solid color-mix(in srgb, var(--bubble, #ff9f43) 40%, white);
-  color: var(--text-secondary); font-weight: 700;
+/* Series page header (story & realm): back pill + meta line + left-aligned title */
+.page.qa { max-width: 1280px; }
+.page.qlist { max-width: 1080px; }
+.qa-top {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: center;
+  margin-bottom: 12px;
+}
+.qa-back { padding: 8px 14px; font-weight: 400; }
+.qa-heading { min-width: 0; }
+.qa-meta {
+  display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  font-size: 0.85rem; color: var(--text-secondary); font-weight: 700;
+}
+.qa-heading h1 {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0; font-size: clamp(1.25rem, 2.4vw, 1.7rem); line-height: 1.3;
+}
+.qa-badge-line {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px;
+  margin: 4px 0 0; font-size: 0.85rem; color: var(--text-secondary);
 }
 .story-era-pill {
-  padding: 3px 10px; border-radius: 999px; font-size: 0.86rem;
+  padding: 1px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 700;
   background: #fff4e0; color: #b55d00; border: 1.5px solid #ffd28c;
 }
-.story-main {
-  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 18px; align-items: start;
+.qa-top-tools { display: flex; align-items: center; gap: 8px; }
+.qa-top-tools .pill-btn { padding: 6px 12px; font-size: 0.85rem; }
+
+/* Story page: chat on the left, sticky film on the right (same as the series) */
+.qa-main.has-film {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); column-gap: 24px; align-items: start;
 }
-.story-film-col { position: sticky; top: 14px; }
-.story-chat-col { display: grid; gap: 10px; }
+.qa-main.has-film > * { grid-column: 1; }
+.qa-main.has-film > .qa-film { grid-column: 2; grid-row: 1 / span 3; position: sticky; top: 16px; }
+.qa-chat { display: grid; gap: 14px; }
+.qa-film .map-player {
+  padding: 10px; border-radius: var(--radius-lg); background: #fff;
+  border: 3px solid var(--border-color); box-shadow: var(--shadow-md);
+}
+.qa-film .map-stage-frame { border-width: 2px; border-radius: var(--radius-md); box-shadow: none; }
+.qa-film .map-controls { padding: 2px 4px; border: 0; box-shadow: none; }
+.qa-film .map-scene-pills { padding: 0 4px 4px; }
 
 .qa-scene {
-  margin: 0 0 4px; padding: 10px 14px; border-radius: var(--radius-sm);
-  background: #fff9ec; border: 2px dashed #ffd188; font-weight: 700; font-size: 0.96rem;
+  display: inline-block; margin: 6px 0 0; padding: 6px 16px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75); color: var(--text-secondary); font-size: 0.92rem; text-align: left;
 }
 .qa-turn {
-  display: grid; gap: 8px; padding: 10px; border-radius: var(--radius-md);
-  border: 2px solid transparent; transition: background 0.2s, border-color 0.2s;
+  display: grid; gap: 10px; border-radius: 20px; transition: background 0.3s, box-shadow 0.3s;
 }
-.qa-turn.is-playing { background: rgba(255, 244, 224, 0.72); border-color: #ffc27a; }
-.qa-line { display: flex; gap: 10px; align-items: flex-start; }
+.qa-turn + .qa-turn { padding-top: 6px; }
+.qa-turn.is-playing { background: rgba(255, 159, 67, 0.1); box-shadow: 0 0 0 3px rgba(255, 159, 67, 0.35); }
+.qa-line { display: flex; gap: 10px; align-items: flex-start; animation: pop 0.35s both; }
 .qa-line.is-nian { flex-direction: row-reverse; }
 .qa-avatar {
-  flex: none; width: 40px; height: 40px; border-radius: 50%; overflow: hidden;
-  background: #e5f0ff; border: 2px solid #8db6f0;
+  flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; overflow: hidden;
+  background: #e5f0ff; border: 2px solid #8db6f0; box-shadow: var(--shadow-sm);
 }
 .qa-line.is-nian .qa-avatar { background: #fff1d6; border-color: #ffb36b; }
 .qa-bubble {
-  max-width: 92%; padding: 9px 14px 10px; border-radius: 18px;
-  background: #fff; border: 2px solid #cfe0f7; box-shadow: var(--shadow-sm);
+  max-width: min(620px, 82%); padding: 10px 16px 12px; border-radius: 18px;
+  background: #fff; border: 2px solid #cfe0f7; border-top-left-radius: 4px; box-shadow: var(--shadow-sm);
 }
-.qa-line.is-nian .qa-bubble { background: #fff7e6; border-color: #ffd7a8; font-weight: 700; }
-.qa-line.is-speaking .qa-bubble { border-color: #ff9f43; box-shadow: 0 0 0 3px rgba(255, 159, 67, 0.3); }
-.qa-head-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.qa-line.is-nian .qa-bubble { background: #fff7e6; border-color: #ffd7a8; border-top-left-radius: 18px; border-top-right-radius: 4px; }
+.qa-line.is-nian .qa-bubble p { font-weight: 700; }
+.qa-line.is-speaking .qa-bubble { box-shadow: 0 0 0 3px #ff9f43, var(--shadow-sm); }
+.qa-line.is-speaking .qa-avatar { border-color: #ff9f43; }
+.qa-head-row { display: flex; align-items: center; gap: 8px; }
+.qa-head-row .speak-btn { width: 24px; height: 24px; font-size: 0.75rem; }
 .qa-name { font-size: 0.78rem; color: var(--text-secondary); font-weight: 700; }
-.qa-bubble p { margin: 2px 0 0; font-size: 1.03rem; line-height: 1.72; }
+.qa-bubble p { margin: 4px 0 0; font-size: 1.05rem; line-height: 1.75; }
 
 .qa-steps {
   display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
@@ -542,10 +559,72 @@ p { margin: 0.4rem 0; }
 .qa-fact-badge small { display: block; font-size: 0.82rem; color: var(--text-secondary); }
 
 .qa-watch {
-  margin-top: 8px; padding: 4px 12px; border-radius: 999px;
-  border: 1.5px solid #ffc27a; background: #fff6e6; font-size: 0.84rem; font-weight: 700; color: #a85c00;
+  margin-top: 8px; padding: 4px 12px; border-radius: 999px; border: 2px solid #ffd2a3; background: #fff7ec;
+  font-size: 0.85rem; font-weight: 700;
 }
-.qa-watch:hover { background: #ffe8c7; }
+.qa-watch:hover { background: #ffe9d1; }
+
+.qa-wrap { display: grid; gap: 12px; margin-top: 26px; padding-top: 18px; border-top: 2px dashed var(--border-light); }
+.qa-wrap h3 { display: flex; align-items: center; gap: 6px; margin: 0 0 6px; font-size: 1.02rem; }
+.qa-wrap h3 .avatar { width: 1.6em; height: 1.6em; border-radius: 50%; background: #fff; }
+.qa-related { display: grid; gap: 8px; }
+.qa-related button {
+  padding: 10px 14px; text-align: left; border-radius: 14px; border: 2px solid var(--border-color); background: #fff;
+}
+.qa-related button:hover { background: #fff7e6; }
+
+/* Realm (topic) page: one intro card, questions grouped by difficulty, other topics as chips */
+.qlist-intro {
+  display: grid; gap: 6px; margin: 4px 0 8px; padding: 14px 18px; border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--bubble, #ff9f43) 12%, white);
+  border: 2px dashed color-mix(in srgb, var(--bubble, #ff9f43) 50%, white);
+}
+.qlist-intro p { margin: 0; line-height: 1.6; border-radius: 12px; transition: background 0.2s; }
+.qlist-intro p.is-speaking { background: rgba(255, 159, 67, 0.16); }
+.qlist-intro .avatar {
+  display: inline-block; width: 1.6em; height: 1.6em; margin-right: 6px; vertical-align: middle;
+  border-radius: 50%; background: #fff;
+}
+.qlist-intro-foot {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px;
+  padding-top: 6px; border-top: 1.5px dashed color-mix(in srgb, var(--bubble, #ff9f43) 35%, white);
+  font-size: 0.88rem; color: var(--text-secondary);
+}
+.qlist-intro-foot span { flex: 1 1 320px; }
+.qlist-guide {
+  flex: none; padding: 4px 12px; border-radius: 999px; border: 2px solid #ffd2a3; background: #fff7ec;
+  font-size: 0.85rem; font-weight: 700;
+}
+.qlist-guide:hover, .qlist-guide.is-speaking { background: #ffe9d1; border-color: #ff9f43; }
+.qlist-group h2 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin: 24px 0 10px; font-size: 1.15rem; }
+.qlist-group h2 small { font-size: 0.82rem; font-weight: 400; color: var(--text-secondary); }
+.qlist-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.qlist-card {
+  display: grid; align-content: start; gap: 6px; padding: 14px 16px; text-align: left; border-radius: var(--radius-md);
+  border: 2px solid color-mix(in srgb, var(--bubble, #ff9f43) 40%, white); background: #fff; box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal), box-shadow 0.2s;
+}
+.qlist-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.qlist-card.is-heard { background: linear-gradient(135deg, #fff 60%, #fff8db); }
+.qlist-card strong { font-size: 1.08rem; line-height: 1.45; }
+.qlist-trigger { color: var(--text-secondary); line-height: 1.5; }
+.qlist-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.qlist-badges em { font-style: normal; font-size: 0.75rem; padding: 1px 8px; border-radius: 999px; background: #f4efe9; color: #6b5a48; }
+.qlist-badges em.is-star { background: #fff1b8; color: #8a5a00; font-weight: 700; }
+.qlist .section-head { margin: 28px 0 10px; }
+.qlist .section-title { margin: 28px 0 10px; font-size: 1.15rem; }
+.qlist .section-head .section-title { margin: 0; }
+.qlist .section-sub { font-size: 0.82rem; font-weight: 400; }
+.qlist .wiki-card { border-width: 2px; }
+.qlist-other { margin-top: 28px; }
+.qlist-other h2 { font-size: 1rem; margin: 0 0 8px; }
+.qlist-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.qlist-chips button {
+  padding: 6px 14px; border-radius: 999px; border: 2px solid var(--border-color); background: #fff;
+  transition: transform var(--transition-fast);
+}
+.qlist-chips button:hover { transform: translateY(-1px); }
+.qlist-chips button[aria-current="true"] { background: #ffe4d0; border-color: #ff9f43; font-weight: 700; }
 
 /* Inline Geo Figures (inspired by chemverse) */
 .geo-figure {
@@ -599,7 +678,7 @@ p { margin: 0.4rem 0; }
 
 .geo-fig-tilt svg { display: block; width: 100%; max-width: 360px; margin: 0 auto; height: auto; }
 
-.story-quiz-card { margin-top: 20px; display: grid; gap: 12px; }
+.story-quiz-card { margin-top: 24px; display: grid; gap: 12px; }
 .story-quiz-head { display: flex; align-items: center; gap: 12px; }
 .story-quiz-head .avatar { width: 52px; height: 52px; flex: none; border-radius: 50%; background: #e5f0ff; border: 2px solid #8db6f0; }
 .story-quiz-head h3 { margin: 0; font-size: 1.1rem; }
@@ -609,10 +688,6 @@ p { margin: 0.4rem 0; }
 .story-quiz-opt.is-correct { background: #e9faef; border-color: #3bb273; color: #206b3d; }
 .story-quiz-opt.is-wrong { background: #fff0f0; border-color: #ff6b6b; color: #b53838; }
 
-.story-footer-grid { display: grid; gap: 12px; margin-top: 16px; }
-.story-next-card h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; }
-.story-next-card .avatar { width: 32px; height: 32px; border-radius: 50%; background: #fff1d6; }
-.story-next-list { display: flex; flex-wrap: wrap; gap: 8px; }
 .parent-tip {
   padding: 12px 16px; border-radius: var(--radius-md); background: #fff;
   border: 2px solid var(--border-color); font-size: 0.96rem;
@@ -773,9 +848,27 @@ p { margin: 0.4rem 0; }
 @media (max-width: 960px) {
   .modes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .wiki-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .story-main, .atlas-layout, .workbench, .globe-layout { grid-template-columns: 1fr; }
-  .story-film-col { position: static; }
+  .atlas-layout, .workbench, .globe-layout { grid-template-columns: 1fr; }
   .globe3d-wrap { height: 420px; }
+}
+
+@media (max-width: 900px) {
+  .qa-top { grid-template-columns: 1fr; gap: 8px; }
+  .qa-top-tools { justify-self: start; }
+  .qa-main.has-film { display: block; }
+  .qa-main.has-film > .qa-film { position: static; margin-bottom: 16px; }
+  .qlist-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .page.qa, .page.qlist { padding: 12px 12px 40px; }
+  .qa-avatar { width: 36px; height: 36px; }
+  .qa-bubble { max-width: 86%; }
+  .qa-film .map-controls { gap: 6px; }
+  .qa-film .map-play-btn { padding: 6px 12px; font-size: 0.86rem; }
+  .qa-film .map-scrubber { flex-basis: 90px; }
+  .qa-film .map-controls .pill-btn { padding: 4px 10px; font-size: 0.8rem; }
+  .qa-film .map-scene-pill { padding: 4px 10px; font-size: 0.78rem; }
 }
 
 @media (max-width: 720px) {

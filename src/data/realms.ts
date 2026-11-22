@@ -1,4 +1,4 @@
-import type { GeoZone, RealmId, RealmMeta } from "./types.ts";
+import type { GeoStory, GeoZone, RealmId, RealmMeta } from "./types.ts";
 
 export const realms: readonly RealmMeta[] = [
   {
@@ -60,6 +60,15 @@ export const realms: readonly RealmMeta[] = [
 export function realmById(id: RealmId): RealmMeta {
   return realms.find((r) => r.id === id) ?? realms[0];
 }
+
+/** 去掉「第 N 站 · 」前缀，给返回按钮和「换一个主题」用 */
+export const realmShortTitle = (realm: RealmMeta) => realm.title.replace(/^第\s*\d+\s*站\s*·\s*/, "");
+
+export const difficultyLabel: Record<GeoStory["difficulty"], string> = {
+  starter: "入门",
+  explorer: "进阶",
+  master: "挑战"
+};
 
 export const GEO_ZONES: Record<string, GeoZone> = {
   south_america_fit: {

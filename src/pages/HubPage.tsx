@@ -6,7 +6,7 @@ import { loadStories, storyCards, storyCardsIn } from "../data/story-index.ts";
 import { geoTalks, geoWiki, hubChats } from "../data/talks.ts";
 import type { GeoStory, RealmId } from "../data/types.ts";
 import type { Settings } from "../kit/Chrome.tsx";
-import { DuoStage, Meter, TalksSection, WikiSection } from "../kit/GameKit.tsx";
+import { DuoStage, TalksSection, WikiSection } from "../kit/GameKit.tsx";
 import { sumStars, useStarBook, type StarBook } from "../kit/progress.ts";
 import { stopSpeaking } from "../kit/speech.ts";
 
@@ -40,15 +40,12 @@ export function HubPage({ settings }: { settings: Settings }) {
     };
   }, [wantStories]);
 
-  const totalStoryMax = storyCards.length * 3;
   const totalQuizTargets = quizStages.reduce((acc, s) => acc + s.targets.length, 0);
   const totalQuizMax = (quizStages.length + 1) * 3;
-  const grandMax = totalStoryMax + totalQuizMax;
 
   const grandEarned =
     storyCards.reduce((acc, s) => acc + Math.min(3, sumStars(book[s.id])), 0) +
     Math.min(totalQuizMax, sumStars(book["geo-quiz"]));
-  const pct = grandMax > 0 ? Math.round((grandEarned / grandMax) * 100) : 0;
 
   const colorByRealm = useMemo(
     () => Object.fromEntries(realms.map((r) => [r.id, r.color])) as Record<RealmId, string>,
@@ -104,14 +101,7 @@ export function HubPage({ settings }: { settings: Settings }) {
       </header>
 
       <div className="hub-progress">
-        <div className="hub-progress-info">
-          <span aria-hidden="true">🏆</span>
-          <span>地球探索勋章</span>
-          <strong>
-            ⭐ {grandEarned} / {grandMax}
-          </strong>
-        </div>
-        <Meter pct={pct} label="点亮进度" valueText={`${pct}%`} />
+        {grandEarned > 0 && <span className="hub-progress-info">⭐ 已经收集 {grandEarned} 颗星</span>}
         <button
           type="button"
           className="pill-btn sound-btn"
