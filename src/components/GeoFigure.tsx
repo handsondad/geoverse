@@ -100,8 +100,8 @@ export function GeoFigure({ figure }: { figure: GeoFigureSpec }) {
   return (
     <figure className="geo-figure">
       <div className="geo-fig-tilt">
-        <svg viewBox="0 0 280 110" aria-hidden="true">
-          <rect width="280" height="110" rx="14" fill="#1e1b4b" />
+        <svg viewBox="0 0 360 110" aria-hidden="true">
+          <rect width="360" height="110" rx="14" fill="#1e1b4b" />
           <circle cx="44" cy="55" r="20" fill="#ffd93d" />
           <line x1="72" y1="36" x2="150" y2="36" stroke="#fde047" strokeWidth="2" strokeDasharray="4 4" />
           <line x1="72" y1="55" x2="150" y2="55" stroke="#fde047" strokeWidth="2" strokeDasharray="4 4" />
@@ -112,10 +112,10 @@ export function GeoFigure({ figure }: { figure: GeoFigureSpec }) {
             <line x1="-26" y1="0" x2="26" y2="0" stroke="#fde047" strokeWidth="2" />
             <line x1="0" y1="-36" x2="0" y2="36" stroke="#ffffff" strokeWidth="2" strokeDasharray="3 2" />
           </g>
-          <text x="216" y="26" fill="#fef08a" fontSize="11" fontWeight="700">
+          <text x="222" y="26" fill="#fef08a" fontSize="11" fontWeight="700">
             {figure.northNote}
           </text>
-          <text x="216" y="92" fill="#bae6fd" fontSize="11" fontWeight="700">
+          <text x="222" y="92" fill="#bae6fd" fontSize="11" fontWeight="700">
             {figure.southNote}
           </text>
         </svg>

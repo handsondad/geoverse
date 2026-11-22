@@ -158,6 +158,22 @@ export function GeoStageSvg({
     });
   }
 
+  const specialLatLines = (showTropics && kind !== "diagram"
+    ? [
+        { lat: 66.5, label: "北极圈 66.5°N", color: "#3b82f6" },
+        { lat: 23.4, label: "北回归线 23.4°N", color: "#f97316" },
+        { lat: 0, label: "赤道 0°", color: "#ef4444" },
+        { lat: -23.4, label: "南回归线 23.4°S", color: "#f97316" }
+      ]
+    : []
+  )
+    .map((ln) => ({ ...ln, y: project([camera.center[0], ln.lat], camera)[1] }))
+    .filter((ln) => ln.y >= 60 && ln.y <= STAGE_H - 35);
+  // 纬线名字写在左边，先占位，免得区域名、地名压上去
+  for (const ln of specialLatLines) {
+    placed.push({ x1: 10, y1: ln.y - 24, x2: 22 + estimateTextWidth(ln.label, 14), y2: ln.y - 1 });
+  }
+
   // 按相机视口裁剪并缓存底图矢量，避免 60fps 播放动画时每帧全量投影全球多边形
   const camKey = `${camera.center[0].toFixed(3)},${camera.center[1].toFixed(3)},${camera.lonSpan.toFixed(3)}`;
 
@@ -250,6 +266,7 @@ export function GeoStageSvg({
         return null;
       }
       placedPinCenters.push([x, y]);
+      placed.push({ x1: x - 14, y1: y - 14, x2: x + 14, y2: y + 14 });
       const align = m.align ?? "t";
       let showLabel = true;
       const box = estimateLabelBox(x, y, m.label, align);
@@ -276,21 +293,21 @@ export function GeoStageSvg({
       if (!z.labelAt) return null;
       const [x, y] = project(wrapCoordForCam(z.labelAt, camera), camera);
       if (x < 45 || x > STAGE_W - 45 || y < 60 || y > STAGE_H - 40) return null;
-      const box = estimateLabelBox(x, y, z.label, "c");
-      if (placed.some((p) => overlaps(p, box))) return null;
-      placed.push(box);
-      return { id: z.id, label: z.label, color: z.color, x, y };
+      // 区域名放不下时先上下挪一挪，整条都要留在画面里
+      for (const dy of [0, 24, -24, 48, -48]) {
+        const ly = y + dy;
+        const box = estimateLabelBox(x, ly, z.label, "c");
+        const half = (box.x2 - box.x1) / 2;
+        const lx = Math.min(Math.max(x, 8 + half), STAGE_W - 8 - half);
+        const fit = { x1: lx - half, y1: box.y1, x2: lx + half, y2: box.y2 };
+        if (fit.y1 < 6 || fit.y2 > STAGE_H - 6) continue;
+        if (placed.some((p) => overlaps(p, fit))) continue;
+        placed.push(fit);
+        return { id: z.id, label: z.label, color: z.color, x: lx, y: ly + 5 };
+      }
+      return null;
     })
     .filter(Boolean) as { id: string; label: string; color: string; x: number; y: number }[];
-
-  const specialLatLines = showTropics
-    ? [
-        { lat: 66.5, label: "北极圈 66.5°N", color: "#3b82f6" },
-        { lat: 23.4, label: "北回归线 23.4°N", color: "#f97316" },
-        { lat: 0, label: "赤道 0°", color: "#ef4444" },
-        { lat: -23.4, label: "南回归线 23.4°S", color: "#f97316" }
-      ]
-    : [];
 
   function handleSvgClick(e: React.MouseEvent<SVGSVGElement>) {
     if (!onMapClick || kind === "diagram") return;
@@ -328,15 +345,9 @@ export function GeoStageSvg({
           <path d={baseMapPaths.gridPath} stroke="#b9d8f5" strokeWidth="0.8" strokeDasharray="4 4" opacity="0.65" />
 
           {specialLatLines.map((ln) => {
-            const [, y] = project([camera.center[0], ln.lat], camera);
-            if (y < 60 || y > STAGE_H - 35) return null;
+            const y = ln.y;
             return (
-              <g key={ln.label}>
-                <line x1="0" y1={y} x2={STAGE_W} y2={y} stroke={ln.color} strokeWidth="2" strokeDasharray="7 5" opacity="0.72" />
-                <text x="16" y={y - 6} fontSize="12" fontWeight="700" fill={ln.color} className="map-territory-label">
-                  {ln.label}
-                </text>
-              </g>
+              <line key={ln.label} x1="0" y1={y} x2={STAGE_W} y2={y} stroke={ln.color} strokeWidth="2" strokeDasharray="7 5" opacity="0.72" />
             );
           })}
 
@@ -417,6 +428,11 @@ export function GeoStageSvg({
           )}
 
           <g className="map-polity-labels">
+            {specialLatLines.map((ln) => (
+              <text key={ln.label} x="16" y={ln.y - 6} fontWeight="700" fill={ln.color} className="map-territory-label">
+                {ln.label}
+              </text>
+            ))}
             {zoneLabels.map((lbl) => (
               <text
                 key={lbl.id}
